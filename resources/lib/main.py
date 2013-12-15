@@ -24,93 +24,30 @@ class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Create urlhandler and Fetch Channel Page
-		url = "http://earthtouch.tv/"
-		sourceObj = urlhandler.urlopen(url, 3628800)# TTL = 4 Week
-		parserCH = parsers.ChannelParser()
-		
-		# Setup Data Queues to handle Urls and SourceCode
-		self.Queue = __import__("Queue")
-		self.queueUrls = self.Queue.Queue()
-		self.queueHTML = self.Queue.Queue()
-		self.queueItem = self.Queue.deque()
-		
-		# Fetch Url List of Channels to Load and Start Fetcher Thread
-		import threading
-		for url in parserCH.parse(sourceObj.read()):
-			self.queueUrls.put(url)
-			threading.Thread(target=self.urlThread).start()
-		
-		# Start Thread to Handle HTML Source and wait to Finish
-		threading.Thread(target=self.dataThread).start()
-		self.queueUrls.join()
-		self.queueHTML.join()
+		url = "http://www.earthtouchnews.com/videos/overview.aspx"
+		sourceCode = urlhandler.urlread(url, 3628800)# TTL = 4 Week
+		parser = parsers.ShowParser()
 		
 		# Add Youtube and Vimeo Channels
-		self.add_youtube_channel("earthtouch", hasPlaylist=True)
+		self.add_youtube_channel("earthtouch", "-All Videos", hasPlaylist=True)
 		
 		# Set Content Properties
-		self.set_sort_methods(self.sort_method_video_title)
+		self.set_sort_methods(self.sort_method_title_ignore_the)
 		self.set_content("files")
 		
 		# Return List of Video Listitems
-		return list(self.queueItem)
-	
-	def urlThread(self):
-		# Grabs Url from Queue
-		url = self.queueUrls.get(timeout=10)
-		
-		# Fetch SourceCode for url resource
-		handle = urlhandler.HttpHandler()
-		handle.add_response_handler()
-		handle.add_cache_handler(604800)
-		source = handle.open(url).read()
-		
-		# Place Source into HTML Queue
-		self.queueHTML.put(source)
-		
-		# Signals to Queue that job is done
-		self.queueUrls.task_done()
-	
-	def dataThread(self):
-		try:
-			while True:
-				# Grabs Url from Queue
-				source = self.queueHTML.get(timeout=10)
-				
-				# Parse Source
-				parserSP = parsers.ShowParser()
-				videoItems = parserSP.parse(source)
-				self.queueItem.extend(videoItems)
-				
-				# Signals to Queue that job is done
-				self.queueHTML.task_done()
-		except self.Queue.Empty: pass
+		return parser.parse(sourceCode)
 
 class Videos(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch Video Content
 		sourceCode = urlhandler.urlread(plugin["url"], 28800) # TTL = 8 Hours
-		videoItems = parsers.EpisodeParser().parse(sourceCode)
+		parser = parsers.EpisodeParser()
 		
 		# Set Content Properties
-		self.set_sort_methods(self.sort_method_video_title, self.sort_method_video_runtime)
+		self.set_sort_methods(self.sort_method_title_ignore_the, self.sort_method_video_runtime)
 		self.set_content("episodes")
 		
 		# Return List of Video Listitems
-		return videoItems
-
-class PlayVideo(listitem.PlayMedia):
-	@plugin.error_handler
-	def resolve(self):
-		# Fetch Page Source
-		htmlSource = urlhandler.urlread(plugin["url"], 604800) # TTL = 1 Week
-		
-		# Fetch Video Url From JavaScript
-		import re
-		match = re.findall('swfobject.embedSWF\("http://www.youtube.com/v/(\S+?)\?enablejsapi=1', htmlSource)
-		if match:
-			from xbmcutil import videoResolver
-			return videoResolver.youtube_com().decode(match[0])
-		else:
-			return self.sources(htmlSource)
+		return parser.parse(sourceCode)
