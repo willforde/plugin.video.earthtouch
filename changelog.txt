@@ -1,4 +1,4 @@
-[B]Version 1.1.0[/B]
+[B]Version 1.1.1[/B]
 - Changed icon.png (Thanks goes to moneymaker for the new image)
 
 [B]Version 1.1.0[/B]
