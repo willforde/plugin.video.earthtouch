@@ -1,5 +1,8 @@
 [B]Version 1.1.0[/B]
-- Rebuild content scraper after site total changed
+- Changed icon.png (Thanks goes to moneymaker for the new image)
+
+[B]Version 1.1.0[/B]
+- Rebuild content scraper after site totally changed
 
 [B]Version 1.0.0[/B]
 - Initial Version
