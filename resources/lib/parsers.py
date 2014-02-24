@@ -21,7 +21,7 @@ import HTMLParser
 from xbmcutil import listitem, plugin
 
 # Host Url
-host = "http://www.earthtouchnews.com%s"
+host = u"http://www.earthtouchnews.com%s"
 
 class ShowParser(HTMLParser.HTMLParser):
 	"""
@@ -56,35 +56,38 @@ class ShowParser(HTMLParser.HTMLParser):
 		# Convert Attributes to a Dictionary
 		if self.divcount == 0: raise plugin.ParserError
 		elif attrs:
-			# Convert Attributes to a Dictionary
-			attrs = dict(attrs)
-			
 			# Find show-block elements and all div sub elements
-			if tag == "div":
+			if tag == u"div":
 				# Increment div counter when within show-block
-				if self.divcount is None and "class" in attrs and attrs["class"] == "gallery": self.divcount = 1
-				elif self.divcount: self.divcount +=1
+				if self.divcount: self.divcount +=1
+				else:
+					# Convert Attributes to a Dictionary
+					attrs = dict(attrs)
+					if u"class" in attrs and attrs[u"class"] == u"gallery": self.divcount = 1
 			
 			# When within show-block fetch show data
 			elif self.divcount == 5:
+				# Convert Attributes to a Dictionary
+				attrs = dict(attrs)
+				
 				# Fetch Video Url and Title
-				if tag == "a" and "href" in attrs: 
-					url = attrs["href"]
-					if url[:4] == "http": self.item.urlParams["url"] = url
+				if tag == u"a" and u"href" in attrs: 
+					url = attrs[u"href"]
+					if url[:4] == u"http": self.item.urlParams["url"] = url
 					else: self.item.urlParams["url"] = host % url
-					title = url[url.rfind("/")+1:url.rfind(".")]
-					self.item.setLabel(title.replace("-"," ").title())
+					title = url[url.rfind(u"/")+1:url.rfind(u".")]
+					self.item.setLabel(title.replace(u"-",u" ").title())
 					self.item.setIdentifier(title)
 					if title in self.metaData: self.item.setFanartImage(self.metaData[title])
 				
 				# Fetch Image Url
-				elif tag == "img" and "src" in attrs:
-					if attrs["src"][:4] == "http": self.item.setThumbnailImage(attrs["src"])
-					else: self.item.setThumbnailImage(host % attrs["src"])
+				elif tag == u"img" and u"src" in attrs:
+					if attrs[u"src"][:4] == u"http": self.item.setThumbnailImage(attrs[u"src"])
+					else: self.item.setThumbnailImage(host % attrs[u"src"])
 	
 	def handle_endtag(self, tag):
 		# Decrease div counter on all closing div elements
-		if tag == "div" and self.divcount:
+		if tag == u"div" and self.divcount:
 			self.divcount -= 1
 			
 			# When at closeing tag for show-block, save fetched data
@@ -113,7 +116,7 @@ class EpisodeParser(HTMLParser.HTMLParser):
 		else: self.isHD = setting >= 2
 		
 		# Strip out head info from html to fix malformed html
-		headend = html.find("</head>") + 7
+		headend = html.find(u"</head>") + 7
 		
 		# Proceed with parsing
 		results = []
@@ -140,56 +143,61 @@ class EpisodeParser(HTMLParser.HTMLParser):
 		# Convert Attributes to a Dictionary
 		if self.divcount == 0: raise plugin.ParserError
 		elif attrs:
-			# Convert Attributes to a Dictionary
-			attrs = dict(attrs)
-		
 			# Find show-block elements and all div sub elements
-			if tag == "div":
+			if tag == u"div":
 				# Increment div counter when within show-block
-				if self.divcount is None and "class" in attrs and attrs["class"] == "stories-gallery": self.divcount = 1
-				elif self.divcount: self.divcount +=1
-				elif self.fanart is None and "class" in attrs and "style" in attrs and attrs["class"] == "slidebgholder":
-					fanart = attrs["style"]
-					fanart = fanart[fanart.find("(")+1:fanart.find(")")]
-					if fanart[:4] == "http": self.fanart = fanart
-					else: self.fanart = host % fanart
-					from xbmcutil import storageDB
-					with storageDB.Metadata() as metaData:
-						metaData[plugin["identifier"]] = self.fanart
-						metaData.sync()
+				if self.divcount: self.divcount +=1
+				else:
+					# Convert Attributes to a Dictionary
+					attrs = dict(attrs)
+					
+					# Check for required section
+					if u"class" in attrs and attrs[u"class"] == u"stories-gallery": self.divcount = 1
+					elif self.fanart is None and u"class" in attrs and u"style" in attrs and attrs[u"class"] == u"slidebgholder":
+						fanart = attrs[u"style"]
+						fanart = fanart[fanart.find(u"(")+1:fanart.find(u")")]
+						if fanart[:4] == u"http": self.fanart = fanart
+						else: self.fanart = host % fanart
+						from xbmcutil import storageDB
+						with storageDB.Metadata() as metaData:
+							metaData[plugin["identifier"]] = self.fanart
+							metaData.sync()
 			
 			# When within show-block fetch show data
 			elif self.divcount == 5:
+				# Convert Attributes to a Dictionary
+				attrs = dict(attrs)
+				
 				# Fetch Video Url
-				if tag == "a" and "href" in attrs and not "url" in self.item.urlParams:
-					if attrs["href"][:4] == "http": self.item.urlParams["url"] = attrs["href"]
-					else: self.item.urlParams["url"] = host % attrs["href"]
+				if tag == u"a" and u"href" in attrs and not u"url" in self.item.urlParams:
+					if attrs[u"href"][:4] == u"http": self.item.urlParams["url"] = attrs[u"href"]
+					else: self.item.urlParams["url"] = host % attrs[u"href"]
 				
 				# Fetch Image url
-				elif tag == "span" and "style"  in attrs and "class" in attrs and attrs["class"] == "episodeImg":
-					img = attrs["style"]
-					img = img[img.find("(")+1:img.find(")")]
-					if img[:4] == "http": self.item.setThumbnailImage(img)
+				elif tag == u"span" and u"style" in attrs and u"class" in attrs and attrs[u"class"] == u"episodeImg":
+					img = attrs[u"style"]
+					img = img[img.find(u"(")+1:img.find(u")")]
+					if img[:4] == u"http": self.item.setThumbnailImage(img)
 					else: self.item.setThumbnailImage(host % img)
 				
 				# Fetch Title
-				elif tag == "img" and "alt" in attrs:
+				elif tag == u"img" and u"alt" in attrs:
 					self.epcount += 1
-					self.item.setLabel("%i. %s" % (self.epcount, attrs["alt"]))
+					self.item.setLabel(u"%i. %s" % (self.epcount, attrs[u"alt"]))
 				
 				# Fetch Video runtime
-				elif tag == "strong" and "class" in attrs and attrs["class"] == "title":
+				elif tag == u"strong" and u"class" in attrs and attrs[u"class"] == u"title":
 					self.section = 101
 	
 	def handle_data(self, data):
 		# When within selected section fetch Time
 		if self.section == 101:
-			self.item.setDurationInfo(data[data.find(" ")+1:])
+			self.item.setDurationInfo(data[data.find(u" ")+1:])
 			self.section = 0
 	
 	def handle_endtag(self, tag):
 		# Decrease div counter on all closing div elements
-		if tag == "div" and self.divcount:
+		if tag == u"div" and self.divcount:
 			self.divcount -= 1
 			
 			# When at closeing tag for show-block, save fetched data

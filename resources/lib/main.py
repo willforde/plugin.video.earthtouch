@@ -24,12 +24,12 @@ class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Create urlhandler and Fetch Channel Page
-		url = "http://www.earthtouchnews.com/videos/overview.aspx"
+		url = u"http://www.earthtouchnews.com/videos/overview.aspx"
 		sourceCode = urlhandler.urlread(url, 3628800)# TTL = 4 Week
 		parser = parsers.ShowParser()
 		
 		# Add Youtube and Vimeo Channels
-		self.add_youtube_channel("earthtouch", "-All Videos", hasPlaylist=True)
+		self.add_youtube_channel(u"earthtouch", u"-All Videos", hasPlaylist=True)
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_title_ignore_the)
