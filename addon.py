@@ -16,7 +16,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-def selector(action):
+def selector():
+	action = xbmcutil.plugin.actions[0]
 	if action == u"system": xbmcutil.sysCheck()
 	else:
 		# Call Function Based on Action Param
@@ -25,5 +26,4 @@ def selector(action):
 
 # Initiate Startup
 import xbmcutil
-action = xbmcutil.plugin.actions[0]
-if __name__ == "__main__": selector(action)
+if __name__ == "__main__": selector()
