@@ -3,12 +3,12 @@
 	<category>
 		<!-- ViewModes -->
 		<setting type="sep" />
-		<setting id="files" type="enum" label="$ADDON[script.module.xbmcutil 32980]" lvalues="571|537|21371|636" default="0" />
-		<setting id="filescustom" type="number" label="$ADDON[script.module.xbmcutil 32982]" visible="eq(-1,3)" />
-		<setting id="episodes" type="enum" label="$ADDON[script.module.xbmcutil 32981]" lvalues="571|537|21371|636" default="0" />
-		<setting id="episodescustom" type="number" label="$ADDON[script.module.xbmcutil 32982]" visible="eq(-1,3)" />
+		<setting id="files" type="enum" label="$ADDON[script.module.xbmcutil 32921]" lvalues="571|537|21371|636" default="0" />
+		<setting id="filescustom" type="number" label="$ADDON[script.module.xbmcutil 32923]" visible="eq(-1,3)" />
+		<setting id="episodes" type="enum" label="$ADDON[script.module.xbmcutil 32922]" lvalues="571|537|21371|636" default="0" />
+		<setting id="episodescustom" type="number" label="$ADDON[script.module.xbmcutil 32923]" visible="eq(-1,3)" />
 		<!-- Downloads -->
 		<setting type="sep" />
-		<setting id="downloadpath" type="folder" label="$ADDON[script.module.xbmcutil 32983]" source="video" option="writeable" default="" />
+		<setting id="downloadpath" type="folder" label="$ADDON[script.module.xbmcutil 32924]" source="video" option="writeable" default="" />
 	</category>
 </settings>
