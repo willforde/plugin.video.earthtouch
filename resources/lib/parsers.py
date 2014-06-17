@@ -132,7 +132,6 @@ class EpisodeParser(HTMLParser.HTMLParser):
 		# Reset List for Next Run
 		self.item = listitem.ListItem()
 		self.item.setAudioInfo()
-		self.item.setIsPlayable(True)
 		self.item.urlParams["action"] = "system.source"
 		
 		# Set Quality Overlay
@@ -203,5 +202,5 @@ class EpisodeParser(HTMLParser.HTMLParser):
 			# When at closeing tag for show-block, save fetched data
 			if self.divcount == 3:
 				if self.fanart: self.item.setFanartImage(self.fanart)
-				self.append(self.item.getListitemTuple())
+				self.append(self.item.getListitemTuple(True))
 				self.reset_lists()
