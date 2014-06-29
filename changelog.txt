@@ -1,3 +1,10 @@
+[B]Version 1.1.3[/B]
+- Fix Addon after site changes
+- Added option to list show by categories via context menu
+- Update isHD Flag to be more accurate
+- Added unittests
+- Some code cleanup and speedups
+
 [B]Version 1.1.2[/B]
 - Added Full Unicode Support
 

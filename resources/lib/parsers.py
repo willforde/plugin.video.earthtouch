@@ -32,6 +32,7 @@ class ShowParser(HTMLParser.HTMLParser):
 		
 		# Class Vars
 		self.divcount = None
+		self.section = None
 		
 		# Fetch MetaData Database and extract image
 		from xbmcutil import storageDB
@@ -51,22 +52,24 @@ class ShowParser(HTMLParser.HTMLParser):
 		# Reset List for Next Run
 		self.item = listitem.ListItem()
 		self.item.urlParams["action"] = "Videos"
+		self.item.addContextMenuItem(plugin.getstr(21866), "XBMC.Container.Update", action="Cat", updatelisting="true")
 	
 	def handle_starttag(self, tag, attrs):
 		# Convert Attributes to a Dictionary
 		if self.divcount == 0: raise plugin.ParserError
-		elif attrs:
-			# Find show-block elements and all div sub elements
-			if tag == u"div":
-				# Increment div counter when within show-block
-				if self.divcount: self.divcount +=1
-				else:
-					# Convert Attributes to a Dictionary
-					attrs = dict(attrs)
-					if u"class" in attrs and attrs[u"class"] == u"gallery": self.divcount = 1
-			
-			# When within show-block fetch show data
-			elif self.divcount == 5:
+		
+		# Find show-block elements and all div sub elements
+		elif tag == u"div":
+			# Increment div counter when within show-block
+			if self.divcount: self.divcount +=1
+			else:
+				# Convert Attributes to a Dictionary
+				attrs = dict(attrs)
+				if u"class" in attrs and attrs[u"class"] == u"gallery": self.divcount = 1
+		
+		# When within show-block fetch show data
+		elif self.divcount >= 5:
+			if attrs:
 				# Convert Attributes to a Dictionary
 				attrs = dict(attrs)
 				
@@ -75,7 +78,7 @@ class ShowParser(HTMLParser.HTMLParser):
 					url = attrs[u"href"]
 					if url[:4] == u"http": self.item.urlParams["url"] = url
 					else: self.item.urlParams["url"] = host % url
-					title = url[url.rfind(u"/")+1:url.rfind(u".")]
+					title = url.replace(u"/videos/",u"").replace(u"/",u"")
 					self.item.setLabel(title.replace(u"-",u" ").title())
 					self.item.setIdentifier(title)
 					if title in self.metaData: self.item.setFanartImage(self.metaData[title])
@@ -84,6 +87,25 @@ class ShowParser(HTMLParser.HTMLParser):
 				elif tag == u"img" and u"src" in attrs:
 					if attrs[u"src"][:4] == u"http": self.item.setThumbnailImage(attrs[u"src"])
 					else: self.item.setThumbnailImage(host % attrs[u"src"])
+				
+				# Fetch Episode Count
+				elif tag == u"span" and u"class" in attrs and attrs[u"class"] == u"item":
+					self.section = 101
+			
+			# Fetch Plot info
+			elif tag == u"p":
+				self.section = 102
+	
+	def handle_data(self, data):
+		# Fetch Episode Count
+		if self.section == 101: # title
+			title = u"%s (%s)" % (self.item.infoLabels["title"], data[:data.find(u" ")])
+			self.item.setLabel(title)
+			self.section = None
+		# Fetch Plot info when within "p" block
+		if self.section == 102: # Plot
+			self.item.infoLabels["plot"] = data.strip()
+			self.section = None
 	
 	def handle_endtag(self, tag):
 		# Decrease div counter on all closing div elements
@@ -110,10 +132,12 @@ class EpisodeParser(HTMLParser.HTMLParser):
 		self.epcount = 0
 		
 		# Fetch Quality Setting from Youtube Addon
-		setting = plugin.getAddonSetting("plugin.video.youtube", "hd_videos")
-		try: setting = int(setting)
+		try: setting = int(plugin.getAddonSetting("plugin.video.youtube", "hd_videos"))
 		except: self.isHD = None
-		else: self.isHD = setting >= 2
+		else:
+			if setting == 1: self.isHD = False
+			elif setting == 0 or setting >= 2: self.isHD = True
+			else: self.isHD = None
 		
 		# Strip out head info from html to fix malformed html
 		headend = html.find(u"</head>") + 7
@@ -132,11 +156,8 @@ class EpisodeParser(HTMLParser.HTMLParser):
 		# Reset List for Next Run
 		self.item = listitem.ListItem()
 		self.item.setAudioInfo()
+		self.item.setQualityIcon(self.isHD)
 		self.item.urlParams["action"] = "system.source"
-		
-		# Set Quality Overlay
-		if self.isHD is not None:
-			self.item.setQualityIcon(self.isHD)
 	
 	def handle_starttag(self, tag, attrs):
 		# Convert Attributes to a Dictionary
