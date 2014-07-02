@@ -26,8 +26,9 @@ class Initialize(listitem.VirtualFS):
 		# Create urlhandler and Fetch Channel Page
 		if "url" in plugin: url = "http://www.earthtouchnews.com/videos/%s/" % plugin["url"]
 		else: url = u"http://www.earthtouchnews.com/videos/overview/"
-		sourceCode = urlhandler.urlread(url, 604800)# TTL = 1 Week
-		parser = parsers.ShowParser()
+		sourceObj = urlhandler.urlopen(url, 604800)# TTL = 1 Week
+		videoItems = parsers.ShowParser().parse(sourceObj)
+		sourceObj.close()
 		
 		# Add Youtube and Vimeo Channels
 		self.add_youtube_channel(u"earthtouch", u"-%s" % plugin.getuni(16100), hasPlaylist=True, hasHD=True)
@@ -37,14 +38,14 @@ class Initialize(listitem.VirtualFS):
 		self.set_content("files")
 		
 		# Return List of Video Listitems
-		return parser.parse(sourceCode)
+		return videoItems
 
 class Cat(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch SourceCode of Site
 		url = u"http://www.earthtouchnews.com/videos/overview/"
-		sourceCode = urlhandler.urlread(url, 604800) # TTL = 1 Week
+		sourceCode = urlhandler.urlread(url, 604800, stripEntity=False) # TTL = 1 Week
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_title_ignore_the)
@@ -77,12 +78,13 @@ class Videos(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch Video Content
-		sourceCode = urlhandler.urlread(plugin["url"], 14400) # TTL = 4 Hours
-		parser = parsers.EpisodeParser()
+		sourceObj = urlhandler.urlopen(plugin["url"], 14400) # TTL = 4 Hours
+		videoItems = parsers.EpisodeParser().parse(sourceObj)
+		sourceObj.close()
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_title_ignore_the, self.sort_method_video_runtime)
 		self.set_content("episodes")
 		
 		# Return List of Video Listitems
-		return parser.parse(sourceCode)
+		return videoItems

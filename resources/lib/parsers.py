@@ -27,7 +27,11 @@ class ShowParser(HTMLParser.HTMLParser):
 	"""
 		Parses available shows withen categorys, i.e from http://www.earthtouchnews.com/videos/overview.aspx
 	"""
-	def parse(self, html):
+	
+	def parse(self, urlobject, encoding="utf8"):
+		return self.fromstring(urlobject.read(), encoding)
+	
+	def fromstring(self, html, encoding="utf8"):
 		""" Parses SourceCode and Scrape Show """
 		
 		# Class Vars
@@ -42,8 +46,11 @@ class ShowParser(HTMLParser.HTMLParser):
 		results = []
 		self.reset_lists()
 		self.append = results.append
-		try: self.feed(html)
-		except plugin.ParserError: pass
+		try:
+			if encoding: self.feed(html.decode(encoding))
+			else: self.feed(html)
+		except plugin.ParserError:
+			pass
 		
 		# Return Results
 		return results
@@ -122,7 +129,10 @@ class EpisodeParser(HTMLParser.HTMLParser):
 		Parses available episods for current show, i.e from http://www.earthtouchnews.com/videos/wild-sex.aspx
 	"""
 	
-	def parse(self, html):
+	def parse(self, urlobject, encoding="utf8"):
+		return self.fromstring(urlobject.read(), encoding)
+	
+	def fromstring(self, html, encoding="utf8"):
 		""" Parses SourceCode and Scrape Episodes """
 		
 		# Class Vars
@@ -140,6 +150,7 @@ class EpisodeParser(HTMLParser.HTMLParser):
 			else: self.isHD = None
 		
 		# Strip out head info from html to fix malformed html
+		if encoding: html = html.decode(encoding)
 		headend = html.find(u"</head>") + 7
 		
 		# Proceed with parsing
