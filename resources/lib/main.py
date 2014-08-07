@@ -25,7 +25,7 @@ class Initialize(listitem.VirtualFS):
 	def scraper(self):
 		# Create urlhandler and Fetch Channel Page
 		if "url" in plugin: url = "http://www.earthtouchnews.com/videos/%s/" % plugin["url"]
-		else: url = u"http://www.earthtouchnews.com/videos/overview/"
+		else: url = u"http://www.earthtouchnews.com/videos/shows/"
 		sourceObj = urlhandler.urlopen(url, 604800)# TTL = 1 Week
 		videoItems = parsers.ShowParser().parse(sourceObj)
 		sourceObj.close()
@@ -44,7 +44,7 @@ class Cat(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Fetch SourceCode of Site
-		url = u"http://www.earthtouchnews.com/videos/overview/"
+		url = u"http://www.earthtouchnews.com/videos/shows/"
 		sourceCode = urlhandler.urlread(url, 604800, stripEntity=False) # TTL = 1 Week
 		
 		# Set Content Properties
@@ -62,8 +62,8 @@ class Cat(listitem.VirtualFS):
 		localListitem = listitem.ListItem
 		
 		# Fetch Video Information from Page Source
-		for url in re.findall('<li class=\"\">\s+<a href="/videos/(.+?)/" >', sourceCode):
-			# Create listitem of Data
+		for url in re.findall('<li><a class="" href="/videos/(\S+?)/">', sourceCode):		
+		# Create listitem of Data
 			item = localListitem()
 			item.setLabel(url.replace("-", " ").title())
 			item.setParamDict(url=url)

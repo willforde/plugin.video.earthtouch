@@ -183,7 +183,7 @@ class EpisodeParser(HTMLParser.HTMLParser):
 					attrs = dict(attrs)
 					
 					# Check for required section
-					if u"class" in attrs and attrs[u"class"] == u"stories-gallery": self.divcount = 1
+					if u"class" in attrs and attrs[u"class"] == u"episodes-gallery": self.divcount = 1
 					elif self.fanart is None and u"class" in attrs and u"style" in attrs and attrs[u"class"] == u"slidebgholder":
 						fanart = attrs[u"style"]
 						fanart = fanart[fanart.find(u"(")+1:fanart.find(u")")]
@@ -195,7 +195,7 @@ class EpisodeParser(HTMLParser.HTMLParser):
 							metaData.sync()
 			
 			# When within show-block fetch show data
-			elif self.divcount == 5:
+			elif self.divcount >= 4:
 				# Convert Attributes to a Dictionary
 				attrs = dict(attrs)
 				
@@ -207,7 +207,7 @@ class EpisodeParser(HTMLParser.HTMLParser):
 				# Fetch Image url
 				elif tag == u"span" and u"style" in attrs and u"class" in attrs and attrs[u"class"] == u"episodeImg":
 					img = attrs[u"style"]
-					img = img[img.find(u"(")+1:img.find(u")")]
+					img = img[img.find(u"(")+1:img.find(u")")].replace("/remote.axd?","")
 					if img[:4] == u"http": self.item.setThumbnailImage(img)
 					else: self.item.setThumbnailImage(host % img)
 				
@@ -223,7 +223,8 @@ class EpisodeParser(HTMLParser.HTMLParser):
 	def handle_data(self, data):
 		# When within selected section fetch Time
 		if self.section == 101:
-			self.item.setDurationInfo(data[data.find(u" ")+1:])
+			data = data[data.find(u" ")+1:].strip()
+			if data: self.item.setDurationInfo(data)
 			self.section = 0
 	
 	def handle_endtag(self, tag):
