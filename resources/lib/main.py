@@ -35,7 +35,6 @@ class Initialize(listitem.VirtualFS):
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_title_ignore_the)
-		self.set_content("files")
 		
 		# Return List of Video Listitems
 		return videoItems
@@ -49,7 +48,6 @@ class Cat(listitem.VirtualFS):
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_title_ignore_the)
-		self.set_content("files")
 		
 		# Fetch and Return VideoItems
 		return self.regex_scraper(sourceCode) 
@@ -84,7 +82,6 @@ class Videos(listitem.VirtualFS):
 		
 		# Set Content Properties
 		self.set_sort_methods(self.sort_method_title_ignore_the, self.sort_method_video_runtime)
-		self.set_content("episodes")
 		
 		# Return List of Video Listitems
 		return videoItems
