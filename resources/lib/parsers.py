@@ -88,12 +88,12 @@ class ShowParser(HTMLParser.HTMLParser):
 					title = url.replace(u"/videos/",u"").replace(u"/",u"")
 					self.item.setLabel(title.replace(u"-",u" ").title())
 					self.item.setIdentifier(title)
-					if title in self.metaData: self.item.setFanartImage(self.metaData[title])
+					if title in self.metaData: self.item.setFanart(self.metaData[title])
 				
 				# Fetch Image Url
 				elif tag == u"img" and u"src" in attrs:
-					if attrs[u"src"][:4] == u"http": self.item.setThumbnailImage(attrs[u"src"])
-					else: self.item.setThumbnailImage(host % attrs[u"src"])
+					if attrs[u"src"][:4] == u"http": self.item.setThumb(attrs[u"src"])
+					else: self.item.setThumb(host % attrs[u"src"])
 				
 				# Fetch Episode Count
 				elif tag == u"span" and u"class" in attrs and attrs[u"class"] == u"item":
@@ -166,7 +166,7 @@ class EpisodeParser(HTMLParser.HTMLParser):
 	def reset_lists(self):
 		# Reset List for Next Run
 		self.item = listitem.ListItem()
-		self.item.setAudioInfo()
+		self.item.setAudioFlags()
 		self.item.setQualityIcon(self.isHD)
 		self.item.urlParams["action"] = "system.source"
 	
@@ -208,8 +208,8 @@ class EpisodeParser(HTMLParser.HTMLParser):
 				elif tag == u"span" and u"style" in attrs and u"class" in attrs and attrs[u"class"] == u"episodeImg":
 					img = attrs[u"style"]
 					img = img[img.find(u"(")+1:img.find(u")")].replace("/remote.axd?","")
-					if img[:4] == u"http": self.item.setThumbnailImage(img)
-					else: self.item.setThumbnailImage(host % img)
+					if img[:4] == u"http": self.item.setThumb(img)
+					else: self.item.setThumb(host % img)
 				
 				# Fetch Title
 				elif tag == u"img" and u"alt" in attrs:
@@ -224,7 +224,7 @@ class EpisodeParser(HTMLParser.HTMLParser):
 		# When within selected section fetch Time
 		if self.section == 101:
 			data = data[data.find(u" ")+1:].strip()
-			if data: self.item.setDurationInfo(data)
+			if data: self.item.setDuration(data)
 			self.section = 0
 	
 	def handle_endtag(self, tag):
@@ -234,6 +234,6 @@ class EpisodeParser(HTMLParser.HTMLParser):
 			
 			# When at closeing tag for show-block, save fetched data
 			if self.divcount == 3:
-				if self.fanart: self.item.setFanartImage(self.fanart)
+				if self.fanart: self.item.setFanart(self.fanart)
 				self.append(self.item.getListitemTuple(True))
 				self.reset_lists()
