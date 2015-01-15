@@ -167,7 +167,6 @@ class EpisodeParser(HTMLParser.HTMLParser):
 		# Reset List for Next Run
 		self.item = listitem.ListItem()
 		self.item.setAudioFlags()
-		self.item.setQualityIcon(self.isHD)
 		self.item.urlParams["action"] = "system.source"
 	
 	def handle_starttag(self, tag, attrs):
@@ -235,5 +234,5 @@ class EpisodeParser(HTMLParser.HTMLParser):
 			# When at closeing tag for show-block, save fetched data
 			if self.divcount == 3:
 				if self.fanart: self.item.setFanart(self.fanart)
-				self.append(self.item.getListitemTuple(True))
+				self.append(self.item.getListitemTuple(True, self.isHD))
 				self.reset_lists()
