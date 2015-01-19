@@ -55,8 +55,6 @@ class Cat(listitem.VirtualFS):
 	def regex_scraper(self, sourceCode):
 		# Create Speedup vars
 		import re
-		results = []
-		additem = results.append
 		localListitem = listitem.ListItem
 		
 		# Fetch Video Information from Page Source
@@ -67,10 +65,7 @@ class Cat(listitem.VirtualFS):
 			item.setParamDict(url=url)
 			
 			# Store Listitem data
-			additem(item.getListitemTuple(False))
-		
-		# Return list of listitems
-		return results
+			yield item.getListitemTuple(False)
 
 class Videos(listitem.VirtualFS):
 	@plugin.error_handler
