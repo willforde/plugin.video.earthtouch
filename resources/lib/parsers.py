@@ -167,7 +167,7 @@ class EpisodeParser(HTMLParser.HTMLParser):
 		# Reset List for Next Run
 		self.item = listitem.ListItem()
 		self.item.setAudioFlags()
-		self.item.setQualityIcon(self.isHD)
+		self.item.setVideoFlags(self.isHD)
 		self.item.urlParams["action"] = "system.source"
 	
 	def handle_starttag(self, tag, attrs):
