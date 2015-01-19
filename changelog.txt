@@ -1,3 +1,8 @@
+[B]Version 1.1.5[/B] 2015-01-19
+- Removed set_content call
+- Change to return a generator instead of a list
+- Some small method renames
+
 [B]Version 1.1.4[/B] 2014-08-7
 - Fix addon after site changes
 
