@@ -3,6 +3,7 @@
 - Removed unneeded set_sort_methods
 - Removed xbmcutil.cleanup try finally catch
 - Change to return a generator instead of a list
+- Changed settings.xml to use new methods for setting view mode
 - Switch to using with statement
 - Some small method renames
 
