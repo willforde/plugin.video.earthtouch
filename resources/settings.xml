@@ -4,8 +4,5 @@
 		<!-- ViewModes -->
 		<setting label="$ADDON[script.module.xbmcutil 32921]" type="action" action="RunScript(plugin.video.earthtouch, setViewMode, folder)"/>
 		<setting label="$ADDON[script.module.xbmcutil 32922]" type="action" action="RunScript(plugin.video.earthtouch, setViewMode, video)"/>
-		<!-- Downloads -->
-		<setting type="sep" />
-		<setting id="downloadpath" type="folder" label="$ADDON[script.module.xbmcutil 32924]" source="video" option="writeable" default="" />
 	</category>
 </settings>
