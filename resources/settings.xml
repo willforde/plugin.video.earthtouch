@@ -2,7 +2,7 @@
 <settings>
 	<category>
 		<!-- ViewModes -->
-		<setting label="$ADDON[script.module.xbmcutil 33921]" type="action" action="RunScript(plugin.video.earthtouch, setViewMode, folder)"/>
-		<setting label="$ADDON[script.module.xbmcutil 33922]" type="action" action="RunScript(plugin.video.earthtouch, setViewMode, video)"/>
+		<setting label="$ADDON[script.module.xbmcutil 32921]" type="action" action="RunScript(plugin.video.earthtouch, setViewMode, folder)"/>
+		<setting label="$ADDON[script.module.xbmcutil 32922]" type="action" action="RunScript(plugin.video.earthtouch, setViewMode, video)"/>
 	</category>
 </settings>
