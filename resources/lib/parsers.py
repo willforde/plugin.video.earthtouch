@@ -70,34 +70,41 @@ class ShowParser(HTMLParser.HTMLParser):
 			# Increment div counter when within show-block
 			if self.divcount: self.divcount +=1
 			else:
-				# Convert Attributes to a Dictionary
-				attrs = dict(attrs)
-				if u"class" in attrs and attrs[u"class"] == u"gallery": self.divcount = 1
+				# Check for required section
+				for key, value in attrs:
+					if key == u"class" and value == u"gallery":
+						self.divcount = 1
+						break
 		
 		# When within show-block fetch show data
 		elif self.divcount >= 5:
 			if attrs:
-				# Convert Attributes to a Dictionary
-				attrs = dict(attrs)
-				
 				# Fetch Video Url and Title
-				if tag == u"a" and u"href" in attrs: 
-					url = attrs[u"href"]
-					if url[:4] == u"http": self.item.urlParams["url"] = url
-					else: self.item.urlParams["url"] = host % url
-					title = url.replace(u"/videos/",u"").replace(u"/",u"")
-					self.item.setLabel(title.replace(u"-",u" ").title())
-					self.item.setIdentifier(title)
-					if title in self.metaData: self.item.setFanart(self.metaData[title])
+				if tag == u"a":
+					for key, value in attrs:
+						if key == u"href":
+							if value[:4] == u"http": self.item.urlParams["url"] = value
+							else: self.item.urlParams["url"] = host % value
+							title = value.replace(u"/videos/",u"").replace(u"/",u"")
+							self.item.setLabel(title.replace(u"-",u" ").title())
+							self.item.setIdentifier(title)
+							if title in self.metaData: self.item.setFanart(self.metaData[title])
+							break
 				
 				# Fetch Image Url
-				elif tag == u"img" and u"src" in attrs:
-					if attrs[u"src"][:4] == u"http": self.item.setThumb(attrs[u"src"])
-					else: self.item.setThumb(host % attrs[u"src"])
+				elif tag == u"img":
+					for key, value in attrs:
+						if key == u"src":
+							if value[:4] == u"http": self.item.setThumb(value)
+							else: self.item.setThumb(host % value)
+							break
 				
 				# Fetch Episode Count
-				elif tag == u"span" and u"class" in attrs and attrs[u"class"] == u"item":
-					self.section = 101
+				elif tag == u"span":
+					for key, value in attrs:
+						if key == u"class" and value == u"item":
+							self.section = 101
+							break
 			
 			# Fetch Plot info
 			elif tag == u"p":
@@ -196,29 +203,40 @@ class EpisodeParser(HTMLParser.HTMLParser):
 			
 			# When within show-block fetch show data
 			elif self.divcount >= 4:
-				# Convert Attributes to a Dictionary
-				attrs = dict(attrs)
-				
 				# Fetch Video Url
-				if tag == u"a" and u"href" in attrs and not u"url" in self.item.urlParams:
-					if attrs[u"href"][:4] == u"http": self.item.urlParams["url"] = attrs[u"href"]
-					else: self.item.urlParams["url"] = host % attrs[u"href"]
+				if tag == u"a" and not u"url" in self.item.urlParams:
+					for key, value in attrs:
+						if key == u"href":
+							if value[:4] == u"http": self.item.urlParams["url"] = value
+							else: self.item.urlParams["url"] = host % value
+							break
 				
 				# Fetch Image url
-				elif tag == u"span" and u"style" in attrs and u"class" in attrs and attrs[u"class"] == u"episodeImg":
-					img = attrs[u"style"]
-					img = img[img.find(u"(")+1:img.find(u")")].replace("/remote.axd?","")
-					if img[:4] == u"http": self.item.setThumb(img)
-					else: self.item.setThumb(host % img)
+				elif tag ==  u"span":
+					varstyle = varclass = None
+					for key, value in attrs:
+						if key == u"style": varstyle = value
+						elif key == u"class" and value == u"episodeImg": varclass = True
+					
+					if varstyle and varclass:
+						varstyle = varstyle[varstyle.find(u"(")+1:varstyle.find(u")")].replace("/remote.axd?","")
+						if varstyle[:4] == u"http": self.item.setThumb(varstyle)
+						else: self.item.setThumb(host % varstyle)
 				
 				# Fetch Title
-				elif tag == u"img" and u"alt" in attrs:
-					self.epcount += 1
-					self.item.setLabel(u"%i. %s" % (self.epcount, attrs[u"alt"]))
+				elif tag == u"img":
+					for key, value in attrs:
+						if key == u"alt":
+							self.epcount += 1
+							self.item.setLabel(u"%i. %s" % (self.epcount, value))
+							break
 				
 				# Fetch Video runtime
-				elif tag == u"strong" and u"class" in attrs and attrs[u"class"] == u"title":
-					self.section = 101
+				elif tag == u"strong":
+					for key, value in attrs:
+						if key == u"class" and value == u"title":
+							self.section = 101
+							break
 	
 	def handle_data(self, data):
 		# When within selected section fetch Time
