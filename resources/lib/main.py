@@ -24,7 +24,7 @@ class Initialize(listitem.VirtualFS):
 	@plugin.error_handler
 	def scraper(self):
 		# Add Youtube and Vimeo Channels
-		self.add_youtube_channel(u"earthtouch", u"-%s" % plugin.getuni(16100), hasPlaylist=True, hasHD=True)
+		self.add_youtube_videos(u"UUnavGPxEijftXneFxk28srA", label=plugin.getuni(16100))
 		
 		# Create urlhandler and Fetch Channel Page
 		if "url" in plugin: url = "http://www.earthtouchnews.com/videos/%s/" % plugin["url"]
