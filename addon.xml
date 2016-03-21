@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.earthtouch" name="Earth Touch" provider-name="willforde" version="2.0.0">
 	<requires>
-		<import addon="xbmc.python" version="2.19.0"/>
-		<import addon="script.module.xbmcutil" version="3.0.0"/>
-		<import addon="plugin.video.youtube" version="5.0.0"/>
+		<import addon="xbmc.python" version="2.20.0"/>
+		<import addon="plugin.video.youtube" version="5.1.0"/>
+		<import addon="script.module.codequick" version="1.0.0"/>
 	</requires>
 	<extension library="addon.py" point="xbmc.python.pluginsource">
 		<provides>video</provides>
