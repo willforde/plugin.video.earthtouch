@@ -1,5 +1,5 @@
 """
-Copyright: (c) 2013 William Forde (willforde+xbmc@gmail.com)
+Copyright: (c) 2016 William Forde (willforde+kodi@gmail.com)
 License: GPLv3, see LICENSE for more details
 
 This program is free software: you can redistribute it and/or modify
@@ -22,8 +22,8 @@ import codequick
 
 @codequick.route("/")
 class Root(codequick.YoutubeBase):
-    def channelID(self):
-        return "UCnavGPxEijftXneFxk28srA"
+    channel_id = "UCnavGPxEijftXneFxk28srA"
+
 
 # Initiate Startup
 if __name__ == "__main__":
