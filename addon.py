@@ -16,15 +16,14 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-# Standard Library Imports
+# Package Import
 import codequick
 
 
 @codequick.route("/")
-class Root(codequick.YoutubeBase):
-    channel_id = "UCnavGPxEijftXneFxk28srA"
-
+def root():
+    return codequick.youtube.playlists("UCnavGPxEijftXneFxk28srA")
 
 # Initiate Startup
 if __name__ == "__main__":
-    codequick.run(debug=True)
+    codequick.run(True)

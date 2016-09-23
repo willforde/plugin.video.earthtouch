@@ -7,6 +7,5 @@
 		<!-- Disable Controls -->
 		<setting type="sep" />
 		<setting id="disable-cache" type="bool" label="$ADDON[script.module.codequick 32973]" default="false"/>
-		<setting id="disable-bug-reports" type="bool" label="$ADDON[script.module.codequick 32974]" default="false"/>
 	</category>
 </settings>
