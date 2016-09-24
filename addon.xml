@@ -19,4 +19,8 @@
         <source>https://github.com/willforde/plugin.video.earthtouch</source>
         <website>http://www.earthtouchnews.com</website>
     </extension>
+    <assets>
+        <icon>icon.png</icon>
+        <fanart>fanart.jpg</fanart>
+    </assets>
 </addon>
