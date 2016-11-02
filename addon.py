@@ -17,13 +17,13 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
 # Package Import
-import codequick
+from codequick import youtube, route, run
 
 
-@codequick.route("/")
+@route("/")
 def root():
-    return codequick.youtube.playlists("UCnavGPxEijftXneFxk28srA")
+    return youtube.playlists("UCnavGPxEijftXneFxk28srA")
 
 # Initiate Startup
 if __name__ == "__main__":
-    codequick.run(True)
+    run(True)
