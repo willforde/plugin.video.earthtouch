@@ -20,7 +20,11 @@
         <website>http://www.earthtouchnews.com</website>
     </extension>
     <assets>
-        <icon>icon.png</icon>
-        <fanart>fanart.jpg</fanart>
+        <icon>resources/icon.png</icon>
+        <fanart>resources/fanart.jpg</fanart>
+        <screenshot>resources/screenshot-01.jpg</screenshot>
+        <screenshot>resources/screenshot-02.jpg</screenshot>
+        <screenshot>resources/screenshot-03.jpg</screenshot>
+        <screenshot>resources/screenshot-04.jpg</screenshot>
     </assets>
 </addon>
