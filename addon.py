@@ -19,11 +19,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 # Package Import
 from codequick import youtube, route, run
 
-
 @route("/")
 def root():
     return youtube.playlists("UCnavGPxEijftXneFxk28srA")
 
 # Initiate Startup
 if __name__ == "__main__":
-    run(True)
+    run()
