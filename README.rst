@@ -1,5 +1,5 @@
 .. image:: https://api.codacy.com/project/badge/Grade/7b82531be21b45fab751013235aaa146
-  :target: https://www.codacy.com/app/willforde/plugin.video.earthtouch?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=willforde/plugin.video.earthtouch&amp;utm_campaign=Badge_Grade
+    :target: https://www.codacy.com/app/willforde/plugin.video.earthtouch?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=willforde/plugin.video.earthtouch&amp;utm_campaign=Badge_Grade
 
 Earth Touch
 ===========
