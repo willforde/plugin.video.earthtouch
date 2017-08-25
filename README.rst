@@ -12,8 +12,6 @@ Earth Touch News Network is a platform for the latest news and emerging stories 
 filmmakers and other contributors scattered across the globe are brought together by a common mission to tell those
 stories simply and accurately, so they can reach like-minded nature lovers anywhere.
 
-Installation
-------------
 This add-on is available in the official kodi repository and is available on kodi v17 "Krypton" and greater.
 
 .. image:: resources/screenshots/screenshot000.jpg
