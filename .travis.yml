@@ -6,6 +6,7 @@ python:
 
 install:
   - pip install coveralls
+  - pip install pytest-cov
   - pip install https://github.com/willforde/kodi-addondev/archive/master.zip
   - pip install https://github.com/willforde/kodi-mock/archive/master.zip
 
