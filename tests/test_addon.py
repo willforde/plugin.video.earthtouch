@@ -9,4 +9,4 @@ import addon
 class Tester(unittest.TestCase):
     def test_root(self):
         data = addon.Root.test()
-        self.assertEqual(len(data), 44)
+        self.assertGreater(len(data), 40)
