@@ -1,3 +1,6 @@
 [run]
 source=addon
 branch=True
+
+exclude_lines =
+    if __name__ == .__main__.:
