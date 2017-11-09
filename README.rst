@@ -20,7 +20,7 @@ stories simply and accurately, so they can reach like-minded nature lovers anywh
 
 Download
 --------
-The add-on is available in the official kodi repository for kodi v17 "Krypton" and greater.
+The add-on is available in the official kodi repository for kodi v17 "Krypton" and later.
 
 .. image:: resources/screenshots/screenshot000.jpg
 .. image:: resources/screenshots/screenshot001.jpg
