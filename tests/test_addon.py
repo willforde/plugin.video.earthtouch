@@ -1,8 +1,6 @@
-from addondev import initializer
-import os
-
-initializer(os.path.dirname(os.path.dirname(__file__)))
 import unittest
+
+# Testing specific imports
 import addon
 
 
