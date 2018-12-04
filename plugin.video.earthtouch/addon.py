@@ -22,9 +22,8 @@ from codequick import youtube, Route, run
 
 
 @Route.register
-class Root(youtube.Playlists):
-    def run(self, **kwargs):
-        return super(Root, self).run("UCnavGPxEijftXneFxk28srA", loop=True, **kwargs)
+def root(plugin):
+    return youtube.playlists(plugin, "UCnavGPxEijftXneFxk28srA", loop=True)
 
 
 # Initiate add-on
